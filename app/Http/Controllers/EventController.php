@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Tag;
+use App\Models\Event;
+use App\Models\Country;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\Event\CreateEventRequest;
 
 class EventController extends Controller
 {
@@ -18,17 +24,31 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $countries = Country::all();
+        $tags = Tag::all();
+
+        return view('events.create', compact('countries', 'tags'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateEventRequest $request)
     {
-        //
+        if (!$request->hasFile('image'))
+            return back();
+
+
+        $data = $request->validated();
+        $data['image'] = Storage::putFile('events', $request->file('image'));
+        $data['user_id'] = auth()->id();
+        $data['slug'] = $this->generateUniqueSlug($request->title);
+
+        Event::create($data);
+
+        return to_route('events.index');
     }
 
     /**
@@ -61,5 +81,14 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    function generateUniqueSlug($title): string
+    {
+        $slug = Str::slug($title);
+        $uuid = Str::uuid();
+
+        return "$slug-$uuid";
     }
 }
