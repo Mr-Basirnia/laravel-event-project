@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('description');
             $table->date('start_date');
             $table->date('end_date');
+            $table->time('start_time');
             $table->string('image');
             $table->string('address');
             $table->integer('num_tickets');
