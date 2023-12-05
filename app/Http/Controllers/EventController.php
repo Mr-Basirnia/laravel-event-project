@@ -46,7 +46,8 @@ class EventController extends Controller
         $data['user_id'] = auth()->id();
         $data['slug'] = $this->generateUniqueSlug($request->title);
 
-        Event::create($data);
+        $event =  Event::create($data);
+        $event->tags()->attach($request->tags);
 
         return to_route('events.index');
     }
