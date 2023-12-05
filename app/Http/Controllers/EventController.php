@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Event\CreateEventRequest;
 use App\Http\Requests\Event\UpdateEventRequest;
+use Illuminate\Http\RedirectResponse;
 
 class EventController extends Controller
 {
@@ -96,9 +97,14 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Event $event): RedirectResponse
     {
-        //
+        Storage::delete($event->image);
+
+        $event->tags()->detach();
+        $event->delete();
+
+        return to_route('events.index');
     }
 
 
