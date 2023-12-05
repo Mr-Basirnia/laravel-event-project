@@ -7,9 +7,9 @@ use App\Models\Event;
 use App\Models\Country;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Event\CreateEventRequest;
+use App\Http\Requests\Event\UpdateEventRequest;
 
 class EventController extends Controller
 {
@@ -65,17 +65,32 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Event $event): View
     {
-        //
+        $countries = Country::all();
+        $tags = Tag::all();
+
+        return view('events.edit', compact('countries', 'tags', 'event'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateEventRequest $request, Event $event)
     {
-        //
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+
+            Storage::delete($event->image);
+            $data['image'] = Storage::putFile('events', $request->file('image'));
+        }
+
+        $data['slug'] = $this->generateUniqueSlug($request->title);
+        $event->update($data);
+        $event->tags()->sync($request->tags);
+
+        return to_route('events.index');
     }
 
     /**
