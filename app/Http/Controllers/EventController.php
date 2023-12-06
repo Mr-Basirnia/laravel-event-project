@@ -19,7 +19,7 @@ class EventController extends Controller
      */
     public function index(): View
     {
-        $events = Event::all();
+        $events = auth()->user()->events;
 
         return view('events.index', compact('events'));
     }
