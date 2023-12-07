@@ -121,8 +121,8 @@
                 </div>
             </div>
             @auth
-                {{-- <div
-                    class="container d-flex justify-content-center align-items-center w-50 mt-6 bg-slate-200 p-4 rounded-md">
+                <div
+                    class="container d-flex justify-content-center align-items-center w-50 mt-6 bg-gray-100 dark:bg-gray-800 p-4 rounded-md">
                     <div class="">
                         <form action="{{ route('events.comments', $event->id) }}" class="flex justify-between space-x-2"
                             method="POST">
@@ -135,9 +135,12 @@
                                 Post
                             </button>
                         </form>
+                        @error('content')
+                            <div class="text-sm text-red-400 p-2.5">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="w-full">
-                        @foreach ($event->comments()->latest()->get() as $comment)
+                        @forelse ($event->comments()->latest()->get() as $comment)
                             <div class="w-full p-4 duration-500">
                                 <div class="flex items-center rounded-lg bg-white p-4 shadow-md shadow-indigo-50">
                                     <div>
@@ -150,22 +153,29 @@
                                             <h2 class="text-lg font-bold text-gray-900">{{ $comment->user->name }}</h2>
                                         </div>
                                         <p class="text-sm font-semibold text-gray-400">{{ $comment->content }}</p>
-                                        @can('view', $comment)
-                                            <form action="{{ route('events.comments.destroy', [$event->id, $comment->id]) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button
-                                                    class="mt-6 rounded-lg bg-red-400 px-4 py-2 text-sm tracking-wider text-white outline-none hover:bg-red-300">Delete</button>
-
-                                            </form>
-                                        @endcan
+                                        {{-- @can('view', $comment) --}}
+                                        <form action="{{ route('events.comments.destroy', [$event->id, $comment->id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button
+                                                class="mt-6 rounded-lg bg-red-400 px-4 py-2 text-sm tracking-wider text-white outline-none hover:bg-red-300">
+                                                Delete
+                                            </button>
+                                        </form>
+                                        {{-- @endcan --}}
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="w-full p-4 duration-500">
+                                <p class="text-slate-400">
+                                    no comment yet
+                                </p>
+                            </div>
+                        @endforelse
                     </div>
-                </div> --}}
+                </div>
             @endauth
         </div>
 
