@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Comment;
 use App\Models\Country;
 use App\Models\Attending;
+use App\Models\SavedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +33,11 @@ class Event extends Model
         'user_id',
         'country_id',
         'city_id',
+    ];
+
+    protected $casts = [
+        'start_date' => 'date:m/d/Y',
+        'end_date' => 'date:m/d/Y',
     ];
 
 
@@ -68,6 +74,12 @@ class Event extends Model
     public function attendings(): HasMany
     {
         return $this->hasMany(Attending::class);
+    }
+
+
+    public function savedEvents(): HasMany
+    {
+        return $this->hasMany(SavedEvent::class);
     }
 
 
