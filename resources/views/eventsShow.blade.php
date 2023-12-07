@@ -153,17 +153,17 @@
                                             <h2 class="text-lg font-bold text-gray-900">{{ $comment->user->name }}</h2>
                                         </div>
                                         <p class="text-sm font-semibold text-gray-400">{{ $comment->content }}</p>
-                                        {{-- @can('view', $comment) --}}
-                                        <form action="{{ route('events.comments.destroy', [$event->id, $comment->id]) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button
-                                                class="mt-6 rounded-lg bg-red-400 px-4 py-2 text-sm tracking-wider text-white outline-none hover:bg-red-300">
-                                                Delete
-                                            </button>
-                                        </form>
-                                        {{-- @endcan --}}
+                                        @can('view', $comment)
+                                            <form action="{{ route('events.comments.destroy', [$event, $comment]) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button
+                                                    class="mt-6 rounded-lg bg-red-400 px-4 py-2 text-sm tracking-wider text-white outline-none hover:bg-red-300">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endcan
                                     </div>
                                 </div>
                             </div>
