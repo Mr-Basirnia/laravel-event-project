@@ -12,6 +12,8 @@ use App\Http\Controllers\SaveSystemController;
 use App\Http\Controllers\StoreCommentController;
 use App\Http\Controllers\DeleteCommentController;
 use App\Http\Controllers\AttendingSystemController;
+use App\Http\Controllers\EventIndexController;
+use App\Http\Controllers\GalleryIndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,10 @@ use App\Http\Controllers\AttendingSystemController;
 
 Route::get('/', WelcomeController::class)->name('welcome');
 
+Route::get('/e', EventIndexController::class)->name('eventIndex');
 Route::get('/e/{id}', EventShowController::class)->name('eventShow');
+
+Route::get('/gallery', GalleryIndexController::class)->name('galleryIndex');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

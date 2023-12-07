@@ -6,15 +6,15 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class WelcomeController extends Controller
+class EventIndexController extends Controller
 {
     /**
      * Handle the incoming request.
      */
     public function __invoke(Request $request): View
     {
-        $events = Event::with('country', 'tags')->where('end_date', '>=', today())->orderBy('created_at', 'desc')->get();
+        $events = Event::with('country', 'tags')->orderBy('created_at', 'desc')->paginate(12);
 
-        return view('welcome', compact('events'));
+        return view('eventsIndex', compact('events'));
     }
 }
