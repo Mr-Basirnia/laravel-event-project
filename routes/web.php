@@ -7,13 +7,16 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\EventShowController;
+use App\Http\Controllers\EventIndexController;
+use App\Http\Controllers\LikedEventController;
 use App\Http\Controllers\LikeSystemController;
+use App\Http\Controllers\SavedEventController;
 use App\Http\Controllers\SaveSystemController;
+use App\Http\Controllers\GalleryIndexController;
 use App\Http\Controllers\StoreCommentController;
+use App\Http\Controllers\AttendedEventController;
 use App\Http\Controllers\DeleteCommentController;
 use App\Http\Controllers\AttendingSystemController;
-use App\Http\Controllers\EventIndexController;
-use App\Http\Controllers\GalleryIndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +49,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/events', EventController::class);
     Route::resource('/galleries', GalleryController::class);
+
+    Route::get('/liked-events', LikedEventController::class)->name('liked.events');
+    Route::get('/saved-events', SavedEventController::class)->name('saved.events');
+    Route::get('/attended-events', AttendedEventController::class)->name('attended.events');
 
 
     Route::get('/countries/{country}', function (Country $country) {
