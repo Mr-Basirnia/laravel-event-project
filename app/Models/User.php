@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -56,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
+    public function savedEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'saved_events');
+    }
+
 
     public function galleries(): HasMany
     {
@@ -73,9 +79,19 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+    public function likedEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'likes');
+    }
+
 
     public function attendings(): HasMany
     {
         return $this->hasMany(Attending::class);
+    }
+
+    public function attendedEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'attendings');
     }
 }
